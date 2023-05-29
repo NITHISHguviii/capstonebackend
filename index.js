@@ -1,5 +1,7 @@
 //const express = require("express");
 import express from "express";
+//import moviesRouter from "./routes/movies.route.js";
+import moviesRouter from "./routes/movies.route.js"
 import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
 const app = express();
@@ -125,66 +127,7 @@ app.use(express.json());
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
-app.get("/movies", async function (request, response) {
-  if (request.query.rating) {
-    request.query.rating = +request.query.rating;
-  }
-  console.log(request.query);
-
-  const movie = await client
-    .db("movies2")
-    .collection("moviesdata3")
-    .find(request.query)
-    .toArray();
-  response.send(movie);
-});
-app.get("/movies", function (request, response) {
-  response.send(movies);
-});
-app.get("/movies/:id", async function (request, response) {
-  const { id } = request.params;
-  //  console.log(request.params, id);
-  //  const movie = movies.find((mv) => mv.id === id);
-  const movie = await client
-    .db("movies2")
-    .collection("moviesdata3")
-    .findOne({ id: id });
-  movie
-    ? response.send(movie)
-    : response.status(404).send({ message: "message not found" });
-});
-app.post("/movies", async function (request, response) {
-  const data = request.body;
-  console.log(data);
-  const result = await client
-    .db("movies2")
-    .collection("moviesdata3")
-    .insertMany(data);
-  response.send(result);
-});
-app.delete("/movies/:id", async function (request, response) {
-  const { id } = request.params;
-  //  console.log(request.params, id);
-  //  const movie = movies.find((mv) => mv.id === id);
-  const result = await client
-    .db("movies2")
-    .collection("moviesdata3")
-    .deleteOne({ id: id });
-  result.deletedCount > 0
-    ? response.send({ message: "movie deleted sucessfully" })
-    : response.status(404).send({ message: "message not found" });
-});
-app.put("/movies/:id", async function (request, response) {
-  const { id } = request.params;
-  const data = request.body;
-  //  console.log(request.params, id);
-  //  const movie = movies.find((mv) => mv.id === id);
-  const result = await client
-    .db("movies2")
-    .collection("moviesdata3")
-    .updateOne({ id: id }, { $set: data });
-
-  response.send(result);
-});
+app.use('/movies',moviesRouter)
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
+export { client };
