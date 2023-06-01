@@ -1,7 +1,11 @@
 //const express = require("express");
 import express from "express";
 //import moviesRouter from "./routes/movies.route.js";
-import moviesRouter from "./routes/movies.route.js"
+import moviesRouter from "./routes/movies.route.js";
+//import userRouter from "./routes/user.route.js";
+import userRouter from "./routes/user.route.js";
+import cors from "cors";
+import bcrpt from "bcrypt";
 import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
 const app = express();
@@ -124,10 +128,15 @@ const movies = [
   },
 ];
 app.use(express.json());
+app.use(cors());
+
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
-app.use('/movies',moviesRouter)
+app.use("/Movies", moviesRouter);
+app.use("/user",userRouter);
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
+
+
 export { client };
